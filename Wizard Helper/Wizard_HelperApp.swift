@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct Wizard_HelperApp: App {
+    @StateObject var userData = UserData()
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(userData)
         }
     }
 }

@@ -8,14 +8,29 @@
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject var userData: UserData
+    @State private var showNextView: Bool = false
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        ZStack {
+            BackgroundView()
+            VStack {
+                Spacer()
+                Text("WIZARD")
+                    .font(Font.largeTitle.bold())
+                Spacer()
+                GoButton(label: "Los geht's!") {
+                    showNextView = true
+                }
+            }
+            .foregroundStyle(Color.white)
         }
-        .padding()
+        .fullScreenCover(isPresented: $showNextView) {
+            if userData.currentRound == nil {
+                SettingView()
+            } else {
+                SelectTrumpView()
+            }
+        }
     }
 }
 
