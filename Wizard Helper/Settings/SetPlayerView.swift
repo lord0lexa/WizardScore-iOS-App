@@ -17,7 +17,7 @@ struct SetPlayerView: View {
             TabView(selection: $selection) {
                 ForEach(userData.player.indices, id: \.self) { index in
                     SetPlayerPage(
-                        newUser: $userData.player[index].name,
+                        newPlayer: $userData.player[index].name,
                         player: userData.player.map { $0.name },
                         addAction: {
                             addAction()

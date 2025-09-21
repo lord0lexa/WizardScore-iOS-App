@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SetPlayerPage: View {
-    @Binding var newUser: String
+    @Binding var newPlayer: String
     var player: [String]
     var addAction: () -> Void
     var removeAction: () -> Void
@@ -25,7 +25,7 @@ struct SetPlayerPage: View {
             inputBar
             Spacer()
             GoButton(label: "Fertig") { nextAction() }
-                .disabled(player.count < 3 || newUser.isEmpty)
+                .disabled(player.count < 3 || newPlayer.isEmpty)
         }
         .padding(20)
         .foregroundStyle(Color.white)
@@ -35,14 +35,14 @@ struct SetPlayerPage: View {
         HStack(spacing: 5) {
             RoundButton(icon: Image(systemName: "minus")) {
                 if player.count == 1 {
-                    newUser = ""
+                    newPlayer = ""
                 } else {
                     removeAction()
                 }
             }
-            Textfield(text: $newUser)
+            Textfield(text: $newPlayer)
             RoundButton(icon: Image(systemName: "plus")) {
-                if newUser.isEmpty { return }
+                if newPlayer.isEmpty { return }
                 addAction()
             }
             .disabled(player.count >= 6)

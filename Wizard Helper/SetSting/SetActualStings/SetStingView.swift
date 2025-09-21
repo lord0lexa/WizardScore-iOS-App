@@ -18,7 +18,7 @@ struct SetStingView: View {
         ZStack {
             BackgroundView()
             TabView(selection: $selection) {
-                ForEach(Array(rotatedUsers.enumerated()), id: \.element.id) { (index, player) in
+                ForEach(Array(rotatedPlayers.enumerated()), id: \.element.id) { (index, player) in
                     SetStingPage(
                         player: player,
                         stingCount: String(player.currentGuess ?? 0),
@@ -44,7 +44,7 @@ struct SetStingView: View {
         }
     }
     
-    var rotatedUsers: [Player] {
+    var rotatedPlayers: [Player] {
             guard !userData.player.isEmpty else { return [] }
             return (0..<userData.player.count).map { i in
                 let index = (i + (userData.currentRound ?? 1) - 1) % userData.player.count
@@ -76,8 +76,8 @@ struct SetStingView: View {
     private func checkValidStingCount() -> Bool {
         var totalStingCount = 0
         for index in userData.player.indices {
-            let user = userData.player[index]
-            totalStingCount += user.currentStings ?? 0
+            let player = userData.player[index]
+            totalStingCount += player.currentStings ?? 0
         }
         return totalStingCount == userData.currentRound
     }

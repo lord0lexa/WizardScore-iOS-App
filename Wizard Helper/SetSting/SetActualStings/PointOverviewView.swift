@@ -19,7 +19,7 @@ struct PointOverviewView: View {
                 header
                 HStack {
                     scoreBoardLabel
-                    userScoreBoard
+                    playerScoreBoard
                 }
                 Spacer()
                 nextViewButton(isLastRound: isLastRound)
@@ -61,7 +61,7 @@ struct PointOverviewView: View {
         }
     }
     
-    private var userScoreBoard: some View {
+    private var playerScoreBoard: some View {
         let maxValue = userData.player.map { $0.overallPoints }.max() ?? 0
 
         return ForEach(userData.player, id: \.id) { player in
