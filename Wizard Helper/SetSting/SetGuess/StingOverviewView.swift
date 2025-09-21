@@ -15,20 +15,8 @@ struct GuessOverviewView: View {
             BackgroundView()
             VStack {
                 Spacer()
-                Text("Runde " + String(userData.currentRound ?? 0))
-                HStack {
-                    Text("Trumpf: ")
-                    userData.currentTrump?.image
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 30, height: 30)
-                }
-                ForEach(userData.users, id: \.id) { user in
-                    HStack(spacing: 10) {
-                        Text(user.name + ":")
-                        Text("\(user.currentGuess ?? 0)")
-                    }
-                }
+                header
+                userScore
                 Text("Übrig: " + "\(userData.summedUpStings)")
                 Spacer()
                 GoButton(label: "Punkte eintragen ->") {
@@ -40,7 +28,29 @@ struct GuessOverviewView: View {
         .font(.title)
         .foregroundStyle(.white)
         .fullScreenCover(isPresented: $showNextView) {
-            StingSettingView()
+            SetStingView()
+        }
+    }
+    
+    private var header: some View {
+        VStack {
+            Text("Runde " + String(userData.currentRound ?? 0))
+            HStack {
+                Text("Trumpf: ")
+                userData.currentTrump?.image
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 30, height: 30)
+            }
+        }
+    }
+    
+    private var userScore: some View {
+        ForEach(userData.player, id: \.id) { player in
+            HStack(spacing: 10) {
+                Text(player.name + ":")
+                Text("\(player.currentGuess ?? 0)")
+            }
         }
     }
 }

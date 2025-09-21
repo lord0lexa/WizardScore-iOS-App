@@ -36,7 +36,7 @@ struct SelectTrumpView: View {
                 }
             }
             .fullScreenCover(isPresented: $showNextView) {
-                GuessSettingView()
+                SetGuessView()
             }
             ResetButton()
         }
@@ -51,9 +51,9 @@ struct SelectTrumpView: View {
 struct SelectTrumpView_Previews: PreviewProvider {
     static var previews: some View {
         let testData = UserData()
-        testData.users = [
-            User(name: "Peter"),
-            User(name: "Anna")
+        testData.player = [
+            Player(name: "Peter"),
+            Player(name: "Anna")
         ]
         return SelectTrumpView()
             .environmentObject(testData)

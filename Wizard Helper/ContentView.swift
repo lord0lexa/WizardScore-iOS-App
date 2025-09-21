@@ -15,7 +15,7 @@ struct ContentView: View {
             BackgroundView()
             VStack {
                 Spacer()
-                Text("WIZARD")
+                Text("WIZARD SCOREBOARD")
                     .font(Font.largeTitle.bold())
                 Spacer()
                 GoButton(label: "Los geht's!") {
@@ -26,7 +26,7 @@ struct ContentView: View {
         }
         .fullScreenCover(isPresented: $showNextView) {
             if userData.currentRound == nil {
-                SettingView()
+                SetPlayerView()
             } else {
                 SelectTrumpView()
             }

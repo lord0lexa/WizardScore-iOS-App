@@ -1,5 +1,5 @@
 //
-//  SettingView.swift
+//  SetPlayerView.swift
 //  Wizard Helper
 //
 //  Created by Alexandra Zwinger on 17.09.25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SettingView: View {
+struct SetPlayerView: View {
     @EnvironmentObject var userData: UserData
     @State private var selection = 0
     @State private var showNextView: Bool = false
@@ -15,22 +15,18 @@ struct SettingView: View {
         ZStack {
             BackgroundView()
             TabView(selection: $selection) {
-                ForEach(userData.users.indices, id: \.self) { index in
-                    AddPlayerView(
-                        newUser: $userData.users[index].name,
-                        users: userData.users.map { $0.name },
+                ForEach(userData.player.indices, id: \.self) { index in
+                    SetPlayerPage(
+                        newUser: $userData.player[index].name,
+                        player: userData.player.map { $0.name },
                         addAction: {
-                            userData.users.append(User(name: ""))
-                            selection = userData.users.count - 1
+                            addAction()
                         },
                         removeAction: {
-                            updateSelection()
-                            userData.users.remove(at: selection)
-                            selection = selection - 1
+                            removeAction()
                         },
                         nextAction: {
-                            userData.currentRound = 1
-                            showNextView = true
+                            nextAction()
                         }
                     )
                     .tag(index)
@@ -45,20 +41,36 @@ struct SettingView: View {
     }
     
     private func updateSelection() {
-        if let last = userData.users.indices.last {
+        if let last = userData.player.indices.last {
             selection = last
         }
+    }
+    
+    private func addAction() {
+        userData.player.append(Player(name: ""))
+        selection = userData.player.count - 1
+    }
+    
+    private func removeAction() {
+        updateSelection()
+        userData.player.remove(at: selection)
+        selection = selection - 1
+    }
+    
+    private func nextAction() {
+        userData.currentRound = 1
+        showNextView = true
     }
 }
 
 struct SettingView_Previews: PreviewProvider {
     static var previews: some View {
         let testData = UserData()
-        testData.users = [
-            User(name: "Peter"),
-            User(name: "Anna")
+        testData.player = [
+            Player(name: "Peter"),
+            Player(name: "Anna")
         ]
-        return SettingView()
+        return SetPlayerView()
             .environmentObject(testData)
     }
 }

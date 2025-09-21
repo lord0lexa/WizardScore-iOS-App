@@ -10,7 +10,7 @@ import SwiftUI
 struct RankView: View {
     @EnvironmentObject var userData: UserData
     var body: some View {
-        let sortedUsers = userData.users.sorted { lhs, rhs in
+        let sortedPlayer = userData.player.sorted { lhs, rhs in
             if lhs.overallPoints == rhs.overallPoints {
                 return lhs.name.localizedCompare(rhs.name) == .orderedAscending
             } else {
@@ -19,8 +19,8 @@ struct RankView: View {
         }
         
         VStack(alignment: .leading) {
-            ForEach(sortedUsers) { user in
-                Text("\(user.name): \(user.overallPoints)")
+            ForEach(sortedPlayer) { player in
+                Text("\(player.name): \(player.overallPoints)")
                     .font(.title)
             }
         }

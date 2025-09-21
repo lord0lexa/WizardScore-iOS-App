@@ -9,52 +9,66 @@ import SwiftUI
 
 struct SetGuessView: View {
     @EnvironmentObject var userData: UserData
-    var user: User
-    @State var stingCount: String
-    var backAction: () -> Void
-    var forwardAction: () -> Void
+    @Environment(\.dismiss)
+    var dismiss
+    @State private var selection = 0
+    @State private var showNextView: Bool = false
     var body: some View {
-        VStack {
-            HStack {
-                Text("Trumpf: ")
-                userData.currentTrump?.image
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 30, height: 30)
-            }
-            Text("Runde " + String(userData.currentRound ?? 0))
-            Text(user.name)
-            HStack(spacing: 5) {
-                RoundButton(icon: Image(systemName: "chevron.left")) {
-                    if let index = userData.users.firstIndex(where: { $0.id == user.id }) {
-                        userData.users[index].currentGuess = Int(stingCount) ?? 0
-                    }
-                    backAction()
+        ZStack {
+            BackgroundView()
+            TabView(selection: $selection) {
+                let rotatedUsers = (0..<userData.player.count).map { i in
+                    let index = (i + (userData.currentRound ?? 1) - 1) % userData.player.count
+                    return userData.player[index]
                 }
-                RoundButton(icon: Image(systemName: "minus")) {
-                    if let count = Int(stingCount) {
-                        stingCount = String(count - 1)
-                    }
-                }
-                .padding(8)
-                Numberfield(text: $stingCount)
-                RoundButton(icon: Image(systemName: "plus")) {
-                    if let count = Int(stingCount) {
-                        stingCount = String(count + 1)
-                    }
-                }
-                .padding(8)
-                RoundButton(icon: Image(systemName: "chevron.right")) {
-                    if let index = userData.users.firstIndex(where: { $0.id == user.id }) {
-                        userData.users[index].currentGuess = Int(stingCount) ?? 0
-                    }
-                    forwardAction()
+                ForEach(rotatedUsers.indices, id: \.self) { index in
+                    SetGuessPage(
+                        player: rotatedUsers[index],
+                        stingCount: String(rotatedUsers[index].currentGuess ?? 0),
+                        backwardAction: {
+                            backwardAction()
+                        },
+                        forwardAction: {
+                            forwardAction()
+                        }
+                    )
+                        .tag(index)
                 }
             }
-            .padding(.horizontal)
-            Text("Übrig: " + "\(userData.summedUpStings)")
+            .ignoresSafeArea(.all)
+            .tabViewStyle(.page(indexDisplayMode: .never))
+            .fullScreenCover(isPresented: $showNextView) {
+                GuessOverviewView()
+            }
+            ResetButton()
         }
-        .font(.title)
-        .foregroundStyle(.white)
+    }
+    
+    private func backwardAction() {
+        if selection == 0 {
+            dismiss()
+        } else {
+            selection -= 1
+        }
+    }
+    
+    private func forwardAction() {
+        if selection >= userData.player.count - 1 {
+            showNextView = true
+        } else {
+            selection += 1
+        }
+    }
+}
+
+struct StingSettingView_Previews: PreviewProvider {
+    static var previews: some View {
+        let testData = UserData()
+        testData.player = [
+            Player(name: "Peter"),
+            Player(name: "Anna")
+        ]
+        return SetGuessView()
+            .environmentObject(testData)
     }
 }

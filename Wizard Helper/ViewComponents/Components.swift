@@ -40,35 +40,41 @@ struct Textfield: View {
     @Binding var text: String
     var body: some View {
         TextField(
-                "",
-                text: $text
-            )
-            .font(.system(size: 25))
-            .frame(height: 40)
-            .disableAutocorrection(true)
-            .background(Color.gray)
-            .opacity(0.5)
-            .padding(5)
+            "",
+            text: $text
+        )
+        .font(.system(size: 25))
+        .frame(height: 40)
+        .disableAutocorrection(true)
+        .background(Color.gray)
+        .opacity(0.5)
+        .padding(5)
     }
 }
 
 struct Numberfield: View {
     @Binding var text: String
+    var maxValue: Int?
     var body: some View {
         TextField(
-                "",
-                text: $text
-            )
-            .font(.system(size: 25))
-            .frame(height: 40)
-            .disableAutocorrection(true)
-            .padding(5)
-            .background(Color.gray)
-            .opacity(0.5)
-            .keyboardType(.numberPad)
-            .onChange(of: text) {
-                text = text.filter { "0123456789".contains($0) }
+            "",
+            text: $text
+        )
+        .font(.system(size: 25))
+        .frame(height: 40)
+        .disableAutocorrection(true)
+        .padding(5)
+        .background(Color.gray)
+        .opacity(0.5)
+        .keyboardType(.numberPad)
+        .onChange(of: text) {
+            text = text.filter { "0123456789".contains($0) }
+            if let maxValue {
+                if Int(text)! > maxValue {
+                    text = "\(maxValue)"
+                }
             }
+        }
     }
 }
 
@@ -81,7 +87,7 @@ struct TrumpButton: View {
             icon
                 .resizable()
                 .scaledToFit()
-                .frame(height: smaller ?? false ? 85 : 130)
+                .frame(height: smaller ?? false ? 75 : 130)
                 .padding(10)
                 .foregroundStyle(Color.gray)
         }

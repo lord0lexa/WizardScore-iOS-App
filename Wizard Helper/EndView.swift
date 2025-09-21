@@ -23,18 +23,18 @@ struct EndView: View {
                         Text("----")
                         Text("/")
                     }
-                    ForEach(userData.users, id: \.id) { user in
+                    ForEach(userData.player, id: \.id) { player in
                         VStack {
-                            Text(user.name)
+                            Text(player.name)
                                 .lineLimit(1)
-                            ForEach(Array(user.pointHistory.keys.sorted()), id: \.self) { round in
-                                let value = user.pointHistory[round] ?? 0
+                            ForEach(Array(player.pointHistory.keys.sorted()), id: \.self) { round in
+                                let value = player.pointHistory[round] ?? 0
                                 let display = value > 0 ? "+\(value)" : "\(value)"
                                 
                                 Text(display)
                             }
                             Text("----")
-                            Text(String(user.overallPoints))
+                            Text(String(player.overallPoints))
                         }
                     }
                 }

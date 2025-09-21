@@ -1,5 +1,5 @@
 //
-//  User.swift
+//  Player.swift
 //  Wizard Helper
 //
 //  Created by Alexandra Zwinger on 17.09.25.
@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import Combine
 
-struct User: Identifiable, Codable {
+struct Player: Identifiable, Codable {
     var id = UUID()
     var name: String
     var currentGuess: Int?
@@ -39,7 +39,7 @@ enum Trump: Codable {
 }
 
 class UserData: ObservableObject {
-    @Published var users: [User] = [User(name: "")] { didSet { save() } }
+    @Published var player: [Player] = [Player(name: "")] { didSet { save() } }
     @Published var currentTrump: Trump? { didSet { save() } }
     @Published var currentRound: Int? { didSet { save() } }
     
@@ -51,7 +51,7 @@ class UserData: ObservableObject {
 
     private func save() {
         let snapshot = Snapshot(
-            users: users,
+            player: player,
             currentTrump: currentTrump,
             currentRound: currentRound
         )
@@ -63,30 +63,30 @@ class UserData: ObservableObject {
     private func load() {
         if let data = UserDefaults.standard.data(forKey: key),
            let snapshot = try? JSONDecoder().decode(Snapshot.self, from: data) {
-            self.users = snapshot.users
+            self.player = snapshot.player
             self.currentTrump = snapshot.currentTrump
             self.currentRound = snapshot.currentRound
         } else {
-            self.users = [User(name: "")]
+            self.player = [Player(name: "")]
             self.currentTrump = nil
             self.currentRound = nil
         }
     }
     
     private struct Snapshot: Codable {
-        var users: [User]
+        var player: [Player]
         var currentTrump: Trump?
         var currentRound: Int?
     }
     
     func resetGame() {
-        users = [User(name: "")]
+        player = [Player(name: "")]
         currentRound = nil
         currentTrump = nil
     }
     
     var summedUpStings: Int {
-        let sum = users
+        let sum = player
             .map { $0.currentGuess ?? 0 }
             .reduce(0, +)
         if let currentRound {
