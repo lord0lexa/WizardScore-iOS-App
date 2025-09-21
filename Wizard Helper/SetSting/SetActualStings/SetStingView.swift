@@ -36,7 +36,7 @@ struct SetStingView: View {
             .alert(isPresented: $showAlert) {
                 return Alert(
                     title: Text("Stichzahl stimmt nicht"),
-                    message: Text("Bitte überprüfe die Stichzahl für jeden Spieler (\((userData.currentRound ?? 1) - userData.summedUpStings) statt \(userData.currentRound ?? 1)"),
+                    message: Text("Bitte überprüfe die Stichzahl für jeden Spieler (\((userData.currentRound ?? 1) - userData.summedUpStings) statt \(userData.currentRound ?? 1))"),
                     dismissButton: .default(Text("Ok"))
                 )
             }
